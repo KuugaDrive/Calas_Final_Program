@@ -63,7 +63,7 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Form Input LPJ Kegiatan</title>
+  <title>Form Input Proposal Bukber</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
@@ -98,8 +98,8 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
     <nav class="sidebar">
       <img src="../src/img/logo_lab.png" alt="Logo Lab ICT" class="logo" />
       <a href="../src/dashboard_user.php">Dashboard</a>
-      <a href="../src/proposal.php">Proposal</a>
-      <a href="../src/lpj.php" class="active">LPJ</a>
+      <a href="../src/proposal.php" class="active">Proposal</a>
+      <a href="../src/lpj.php">LPJ</a>
       <a href="../src/sertifikat.php">Sertifikat</a>
       <a href="../src/banner.php">Banner</a>
       <a href="../src/dokumentasi.php">Dokumentasi</a>
@@ -107,7 +107,7 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 
     <main class="main-content">
       <div class="content-wrapper">
-        <h2 class="form-title">Form Input LPJ Kegiatan</h2>
+        <h2 class="form-title">Form Input Proposal Bukber</h2>
 
         <form method="POST" action="generate_lpj.php" enctype="multipart/form-data" target="hidden_iframe" onsubmit="return validateFormClientSide() && onSubmitForm()">
 
