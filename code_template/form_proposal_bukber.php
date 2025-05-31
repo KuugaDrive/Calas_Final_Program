@@ -38,7 +38,7 @@ function input_field($label, $name, $type = 'text', $placeholder = '', $required
     } elseif ($type === 'file') {
         echo "<input type='file' class='form-control' id='{$name}' name='{$name}' accept='.png,.jpg,.jpeg' {$req_attr}>";
     } else {
-        if (in_array($name, ['NIM_Ketua_Pelaksana_Form','NIM_Penanggung_Jawab_Form','NIM_Sekretaris_Pelaksana_Form']) && $type === 'text') {
+        if (in_array($name, ['NIM_Ketua_Pelaksana','NIM_Penanggung_Jawab','NIM_Koordinator_Sekretaris']) && $type === 'text') {
             echo "<input type='text' class='form-control' id='{$name}' name='{$name}' placeholder='{$placeholder}' maxlength='10' pattern='\\d{10}' oninput='this.value=this.value.replace(/[^0-9]/g,\"\")' title='Harus 10 digit angka' {$req_attr} />";
         } else {
             echo "<input type='{$type}' class='form-control' id='{$name}' name='{$name}' placeholder='{$placeholder}' value='".htmlspecialchars($value)."' {$req_attr} {$read_attr} />";
@@ -63,7 +63,7 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Form Input LPJ Workshop</title>
+  <title>Form Input LPJ Kegiatan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
@@ -90,6 +90,7 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
     .form-control:focus { border-color: #3498db; box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25); }
     .btn-submit-custom { background-color: #3498db; border-color: #3498db; color: white; padding: 10px 25px; font-size: 16px; border-radius: 5px; transition: background-color 0.3s ease; }
     .btn-submit-custom:hover { background-color: #2980b9; border-color: #2980b9; color: white; }
+    .section-divider { border-top: 2px solid #3498db; margin: 30px 0; padding-top: 20px; }
   </style>
 </head>
 <body>
@@ -106,92 +107,91 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 
     <main class="main-content">
       <div class="content-wrapper">
-        <h2 class="form-title">Form Input LPJ Workshop</h2>
+        <h2 class="form-title">Form Input LPJ Kegiatan</h2>
 
-        <form method="POST" action="generate_lpj_workshop.php" enctype="multipart/form-data" target="hidden_iframe" onsubmit="return validateFormClientSide() && onSubmitForm()">
+        <form method="POST" action="generate_lpj.php" enctype="multipart/form-data" target="hidden_iframe" onsubmit="return validateFormClientSide() && onSubmitForm()">
 
+          <div class="section-divider">
+            <h4>Identitas Kegiatan</h4>
+          </div>
+          
           <?php
           // Identitas Kegiatan
           input_field('Nama Kegiatan', 'Nama_Kegiatan', 'text', 'Contoh: WorthIT#10 (Workshop Tahunan Informasi dan Teknologi) LAB ICT');
-          input_field('Judul Kegiatan', 'Judul_Kegiatan', 'text', 'Contoh: WorthIT#10 : Boost Your IT Skills ');
+          input_field('Judul Kegiatan', 'Judul_Kegiatan', 'text', 'Contoh: WorthIT#10 : Boost Your IT Skills');
           input_field('Periode Asisten Lab', 'Periode_Aslab', 'text', 'Contoh: 2024/2025');
           input_field('Tahun Kegiatan', 'Tahun_Kegiatan', 'number', 'Contoh: 2024');
-          input_field('Hari/Tanggal Kegiatan', 'Hari_Tanggal_Kegiatan', 'text', 'Contoh: Sabtu, 20 Juli 2024');
+          input_field('Hari Kegiatan', 'Hari_Kegiatan', 'text', 'Contoh: Sabtu');
+          input_field('Tanggal Kegiatan', 'Tanggal_Kegiatan', 'date');
+          input_field('Waktu Kegiatan', 'Waktu_Kegiatan', 'text', 'Contoh: 09:00 - 12:00 WIB');
           input_field('Tempat Kegiatan', 'Tempat_Kegiatan', 'text', 'Contoh: Lab ICT');
-          input_field('Anggaran Dana (Rp)', 'Anggaran_Dana', 'text', 'Contoh: Rp.1.500.000,00');
+          input_field('Total Biaya Kegiatan (Rp)', 'Total_Biaya_Kegiatan', 'text', 'Contoh: Rp.1.500.000,00');
+          ?>
 
-          // Detail Pelaksanaan Acara
-          input_field('Tanggal Pengesahan', 'Tanggal_Pengesahan', 'date', '', true);
-          input_field('Waktu Acara Bermulai', 'Waktu_Acara_Bermulai', 'time', 'Contoh: 09:00');
-          input_field('Waktu Acara Berakhir', 'Waktu_Acara_Berakhir', 'time', 'Contoh: 12:00');
-          input_field('Tempat Acara', 'Tempat_Acara', 'text', 'Contoh: Ruang Lab 3');
+          <div class="section-divider">
+            <h4>Penanggung Jawab dan Pelaksana</h4>
+          </div>
+          
+          <?php
+          // Penanggung Jawab dan Pelaksana
+          input_field('Nama Ketua Pelaksana', 'Nama_Ketua_Pelaksana', 'select');
+          input_field('NIM Ketua Pelaksana', 'NIM_Ketua_Pelaksana', 'text', 'Contoh: 2412501914', true, '', 'Harus 10 digit angka');
+          input_field('Nama Penanggung Jawab', 'Nama_Penanggung_Jawab', 'select');
+          input_field('NIM Penanggung Jawab', 'NIM_Penanggung_Jawab', 'text', 'Contoh: 2311500546', true, '', 'Harus 10 digit angka');
+          input_field('Tempat dan Tanggal Pengesahan', 'Tempat_tanggal_pengesahan', 'text', 'Contoh: Malang, 20 Juli 2024');
+          ?>
 
-          // Penanggung Jawab dan Kepanitiaan
-          input_field('Nama Penanggung Jawab (Form)', 'Nama_Penanggung_Jawab_Form', 'select');
-          input_field('NIM Penanggung Jawab (Form)', 'NIM_Penanggung_Jawab_Form', 'text', 'Contoh: 2311500546', true, '', 'Harus 10 digit angka');
-          input_field('Nama Ketua Pelaksana (Form)', 'Nama_Ketua_Pelaksana_Form', 'select');
-          input_field('NIM Ketua Pelaksana (Form)', 'NIM_Ketua_Pelaksana_Form', 'text', 'Contoh: 2412501914', true, '', 'Harus 10 digit angka');
-          input_field('Nama Sekretaris Pelaksana (Form)', 'Nama_Sekretaris_Pelaksana_Form', 'select');
-          input_field('Nama Bendahara (Form)', 'Nama_Bendahara_Form', 'select');
-          input_field('NIM Sekretaris Pelaksana (Form)', 'NIM_Sekretaris_Pelaksana_Form', 'text', 'Contoh: 2411501234', true, '', 'Harus 10 digit angka');
+          <div class="section-divider">
+            <h4>Susunan Panitia</h4>
+          </div>
+          
+          <h5>Sie Sekretaris</h5>
+          <?php
+          input_field('Koordinator Sekretaris', 'Nama_Koordinator_Sekretaris', 'select');
+          for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
+              input_field("Anggota Sekretaris {$i}", "Nama_Anggota_Sekretaris_{$i}", 'select', '', $i === 1);
+          }
+          ?>
 
-          // Upload TTD
-          input_field('Unggah TTD Ketua Pelaksana', 'TTD_Ketua_Pelaksana', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
-          input_field('Unggah TTD Sekretaris Pelaksana', 'TTD_Sekretaris_Pelaksana', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
-          input_field('Unggah TTD Penanggung Jawab', 'TTD_Penanggung_Jawab', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
-
-          // Hasil yang Dicapai
-          textarea_field('Hasil yang Dicapai', 'Hasil_Yang_Dicapai', 5, 'Jelaskan hasil yang dicapai selama kegiatan workshop', true);
-
-          // Panitia per sie
-          echo "<h5>Sie Acara</h5>";
+          <h5>Sie Acara</h5>
+          <?php
+          input_field('Koordinator Acara', 'Nama_Koordinator_Acara', 'select');
           for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
               input_field("Anggota Acara {$i}", "Nama_Anggota_Acara_{$i}", 'select', '', $i === 1);
           }
+          ?>
 
-          echo "<h5>Sie Humas</h5>";
-          for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
-              input_field("Anggota Humas {$i}", "Nama_Anggota_Humas_{$i}", 'select', '', $i === 1);
-          }
-
-          echo "<h5>Sie Dokumentasi & Perlengkapan</h5>";
-          for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
-              input_field("Anggota Dokumentasi {$i}", "Nama_Anggota_PDD_{$i}", 'select', '', $i === 1);
-          }
-
-          echo "<h5>Sie Konsumsi</h5>";
+          <h5>Sie Konsumsi</h5>
+          <?php
+          input_field('Koordinator Konsumsi', 'Nama_Koordinator_Konsumsi', 'select');
           for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
               input_field("Anggota Konsumsi {$i}", "Nama_Anggota_Konsumsi_{$i}", 'select', '', $i === 1);
           }
+          ?>
 
-          echo "<h5>Sie Registrasi</h5>";
+          <h5>Sie PDD (Perlengkapan, Dokumentasi, Dekorasi)</h5>
+          <?php
+          input_field('Koordinator PDD', 'Nama_Koordinator_PDD', 'select');
           for ($i = 1; $i <= $jumlah_anggota_per_divisi; $i++) {
-              input_field("Anggota Registrasi {$i}", "Nama_Anggota_Registrasi_{$i}", 'select', '', $i === 1);
-          }
-
-          // Materi dan Instruktur
-          for ($m = 1; $m <= 3; $m++) {
-              input_field("Materi {$m}", "Materi_{$m}", 'text', "Judul materi {$m}", true);
-              input_field("Nama Instruktur Materi {$m}", "Nama_Instruktur_{$m}", 'select', '', true);
-              input_field("Nama Asisten Instruktur Materi {$m}", "Nama_Asisten_Instruktur_{$m}", 'select', '', false);
+              input_field("Anggota PDD {$i}", "Nama_Anggota_PDD_{$i}", 'select', '', $i === 1);
           }
           ?>
 
+          <div class="section-divider">
+            <h4>Detail Acara</h4>
+          </div>
+          
           <?php
-          // Tambahkan upload file untuk lampiran gambar
-          $lampiran_images = [
-          'Lampiran_Sertifikat_Materi_1', 'Lampiran_Sertifikat_Materi_2', 'Lampiran_Sertifikat_Materi_3',
-          'Lampiran_Dokumentasi'
-          ];
-
-          echo "<h5>Lampiran Gambar</h5>";
-          foreach ($lampiran_images as $lampiran) {
-              input_field("Upload $lampiran", $lampiran, 'file', '', false);
-          }
+          input_field('Waktu Acara Bermulai', 'Waktu_Kegiatan_Bermulai', 'time', 'Contoh: 09:00');
+          input_field('Waktu Acara Berakhir', 'Waktu_Acara_Berakhir', 'time', 'Contoh: 12:00');
+          
+          // Upload TTD
+          input_field('Unggah TTD Ketua Pelaksana', 'TTD_Ketua_Pelaksana', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
+          input_field('Unggah TTD Penanggung Jawab', 'TTD_Penanggung_Jawab', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
           ?>
 
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-submit-custom mt-3">Generate dan Kirim LPJ Workshop</button>
+            <button type="submit" class="btn btn-submit-custom mt-3">Generate dan Kirim LPJ</button>
           </div>
         </form>
       </div>
@@ -203,9 +203,8 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 
   <script>
   function validateFormClientSide() {
-      const nimKetua = document.getElementById('NIM_Ketua_Pelaksana_Form').value;
-      const nimPJ = document.getElementById('NIM_Penanggung_Jawab_Form').value;
-      const nimSekretaris = document.getElementById('NIM_Sekretaris_Pelaksana_Form').value;
+      const nimKetua = document.getElementById('NIM_Ketua_Pelaksana').value;
+      const nimPJ = document.getElementById('NIM_Penanggung_Jawab').value;
       const nimPattern = /^\d{10}$/;
 
       if (!nimPattern.test(nimKetua)) {
@@ -214,10 +213,6 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
       }
       if (!nimPattern.test(nimPJ)) {
           alert('NIM Penanggung Jawab harus terdiri dari 10 digit angka.');
-          return false;
-      }
-      if (!nimPattern.test(nimSekretaris)) {
-          alert('NIM Sekretaris Pelaksana harus terdiri dari 10 digit angka.');
           return false;
       }
       return true;
@@ -263,7 +258,7 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 
   function onSubmitForm() {
     setTimeout(() => {
-      alert('LPJ Workshop berhasil digenerate dan dikirim!');
+      alert('LPJ berhasil digenerate dan dikirim!');
     }, 1500);
   }
   </script>
