@@ -39,10 +39,10 @@ $data = $result->fetch_assoc();
 </head>
 <body>
     <p>
-        Tanda tangan digital ini digunakan untuk proposal kegiatan <strong><?= htmlspecialchars($data['nama_kegiatan']) ?></strong> "<em><?= htmlspecialchars($data['judul']) ?></em>" yang akan diselenggarakan pada <strong><?= htmlspecialchars($data['tgl_kegiatan']) ?></strong>.
+        Tanda tangan digital ini digunakan untuk proposal kegiatan <strong><?= htmlspecialchars($data['nama_kegiatan']) ?></strong> yang akan diselenggarakan pada <strong><?= htmlspecialchars(date('d M Y', strtotime($data['tgl_kegiatan']))) ?></strong>.
     </p>
     <p>
-        <?= htmlspecialchars($data['tgl_setuju']) ?>
+        <?= htmlspecialchars(date('d M Y', strtotime($data['tgl_setuju']))) ?>
     </p>
     <div class="signature">
         Achmad Syarif, S.T., M.Kom.<br />

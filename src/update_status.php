@@ -11,7 +11,7 @@ if (!isset($_SESSION['kd_user']) || $_SESSION['role'] !== 'kepala_lab') {
 }
 
 $jenis = $_POST['jenis'] ?? '';
-$kd = $_POST['kd'] ?? '';
+$kd = $_POST['kd_item'] ?? '';
 $status = $_POST['status'] ?? '';
 
 if (!$jenis || !$kd || !$status) {
@@ -28,13 +28,13 @@ switch ($jenis) {
         $table = 'proposal';
         $id_column = 'kd_proposal';
         $placeholderQR = 'TTD_Kepala_Lab';
-        $verifikasiBaseURL = 'http://localhost/calas/verifikasi_proposal.php?kd_kegiatan=';
+        $verifikasiBaseURL = 'http://localhost/calas/src/verifikasi_proposal.php?kd_kegiatan=';
         break;
     case 'lpj':
         $table = 'lpj';
         $id_column = 'kd_lpj';
         $placeholderQR = 'TTD_Kepala_Lab';
-        $verifikasiBaseURL = 'http://localhost/calas/verifikasi_lpj.php?kd_kegiatan=';
+        $verifikasiBaseURL = 'http://localhost/calas/src/verifikasi_lpj.php?kd_kegiatan=';
         break;
     case 'sertifikat':
         $table = 'sertifikat';
