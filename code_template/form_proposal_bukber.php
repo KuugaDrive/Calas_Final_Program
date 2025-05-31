@@ -35,8 +35,6 @@ function input_field($label, $name, $type = 'text', $placeholder = '', $required
         echo "</select>";
     } elseif ($type === 'textarea') {
         echo "<textarea class='form-control' id='{$name}' name='{$name}' rows='3' placeholder='{$placeholder}' {$req_attr}>".htmlspecialchars($value)."</textarea>";
-    } elseif ($type === 'file') {
-        echo "<input type='file' class='form-control' id='{$name}' name='{$name}' accept='.png,.jpg,.jpeg' {$req_attr}>";
     } else {
         if (in_array($name, ['NIM_Ketua_Pelaksana','NIM_Penanggung_Jawab','NIM_Koordinator_Sekretaris']) && $type === 'text') {
             echo "<input type='text' class='form-control' id='{$name}' name='{$name}' placeholder='{$placeholder}' maxlength='10' pattern='\\d{10}' oninput='this.value=this.value.replace(/[^0-9]/g,\"\")' title='Harus 10 digit angka' {$req_attr} />";
@@ -90,7 +88,29 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
     .form-control:focus { border-color: #3498db; box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25); }
     .btn-submit-custom { background-color: #3498db; border-color: #3498db; color: white; padding: 10px 25px; font-size: 16px; border-radius: 5px; transition: background-color 0.3s ease; }
     .btn-submit-custom:hover { background-color: #2980b9; border-color: #2980b9; color: white; }
-    .section-divider { border-top: 2px solid #3498db; margin: 30px 0; padding-top: 20px; }
+
+    /* Modal */
+    .modal-custom {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content-custom {
+      background-color: #ffffff;
+      margin: 10% auto;
+      padding: 30px;
+      border: none;
+      border-radius: 12px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
@@ -109,14 +129,13 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
       <div class="content-wrapper">
         <h2 class="form-title">Form Input Proposal Bukber</h2>
 
-        <form method="POST" action="generate_lpj.php" enctype="multipart/form-data" target="hidden_iframe" onsubmit="return validateFormClientSide() && onSubmitForm()">
+        <form method="POST" action="generate_proposal_bukber.php" enctype="multipart/form-data" target="hidden_iframe" onsubmit="return validateFormClientSide() && onSubmitForm()">
 
           <div class="section-divider">
             <h4>Identitas Kegiatan</h4>
           </div>
           
           <?php
-          // Identitas Kegiatan
           input_field('Nama Kegiatan', 'Nama_Kegiatan', 'text', 'Contoh: WorthIT#10 (Workshop Tahunan Informasi dan Teknologi) LAB ICT');
           input_field('Judul Kegiatan', 'Judul_Kegiatan', 'text', 'Contoh: WorthIT#10 : Boost Your IT Skills');
           input_field('Periode Asisten Lab', 'Periode_Aslab', 'text', 'Contoh: 2024/2025');
@@ -133,7 +152,6 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
           </div>
           
           <?php
-          // Penanggung Jawab dan Pelaksana
           input_field('Nama Ketua Pelaksana', 'Nama_Ketua_Pelaksana', 'select');
           input_field('NIM Ketua Pelaksana', 'NIM_Ketua_Pelaksana', 'text', 'Contoh: 2412501914', true, '', 'Harus 10 digit angka');
           input_field('Nama Penanggung Jawab', 'Nama_Penanggung_Jawab', 'select');
@@ -185,20 +203,29 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
           input_field('Waktu Acara Bermulai', 'Waktu_Kegiatan_Bermulai', 'time', 'Contoh: 09:00');
           input_field('Waktu Acara Berakhir', 'Waktu_Acara_Berakhir', 'time', 'Contoh: 12:00');
           
-          // Upload TTD
           input_field('Unggah TTD Ketua Pelaksana', 'TTD_Ketua_Pelaksana', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
           input_field('Unggah TTD Penanggung Jawab', 'TTD_Penanggung_Jawab', 'file', '', true, '', 'Format: .png, .jpg, .jpeg. Maks: 1MB');
           ?>
 
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-submit-custom mt-3">Generate dan Kirim LPJ</button>
+            <button type="submit" class="btn btn-submit-custom mt-3">Generate Proposal</button>
           </div>
         </form>
+
+        <!-- Modal sukses -->
+        <div id="successModal" class="modal-custom">
+          <div class="modal-content-custom">
+            <h5>✅ Proposal berhasil digenerate!</h5>
+            <p>File Word sudah terunduh otomatis.</p>
+            <button onclick="redirectDashboard()" class="btn btn-primary mt-3">Kembali ke Dashboard</button>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
 
-  <!-- Frame tersembunyi untuk download file -->
+  <!-- Iframe tersembunyi untuk submit form tanpa reload -->
   <iframe name="hidden_iframe" style="display:none;"></iframe>
 
   <script>
@@ -218,6 +245,21 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
       return true;
   }
 
+  function onSubmitForm() {
+    setTimeout(function () {
+      showSuccessModal();
+    }, 2000); // Delay 2 detik agar file sempat didownload
+  }
+
+  function showSuccessModal() {
+    document.getElementById('successModal').style.display = 'block';
+  }
+
+  function redirectDashboard() {
+    window.location.href = "../src/dashboard_user.php";
+  }
+
+  // Script dropdown nama anggota agar tidak double
   document.addEventListener('DOMContentLoaded', () => {
     const selects = document.querySelectorAll('select.nama-anggota');
 
@@ -255,12 +297,6 @@ function textarea_field($label, $name, $rows = 3, $placeholder = '', $required =
 
     updateDropdowns();
   });
-
-  function onSubmitForm() {
-    setTimeout(() => {
-      alert('LPJ berhasil digenerate dan dikirim!');
-    }, 1500);
-  }
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
