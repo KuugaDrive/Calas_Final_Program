@@ -1,0 +1,53 @@
+.tambah-data-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.btn-primary {
+  background-color: #6f42c1;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  user-select: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #563d7c;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: none;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  margin-bottom: 0;
+  z-index: 1001;
+  padding: 15px;
+}
+
+
+.dropdown-menu a {
+  color: #333;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f1f1f1;
+}

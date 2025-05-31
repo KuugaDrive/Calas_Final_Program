@@ -1,0 +1,11 @@
+{
+    "name": "zum95/calas",
+    "autoload": {
+        "psr-4": {
+            "Zum95\\Calas\\": "src/"
+        }
+    },
+    "require": {
+        "phpoffice/phpword": "^1.3"
+    }
+}
